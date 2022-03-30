@@ -6,7 +6,6 @@ interface NavSectionProps {
 }
 
 export function NavSection({ title, children }: NavSectionProps) {
-  console.log(title)
   return (
     <Box>
       <Text fontWeight="bold" color="gray.400" fontSize="small">

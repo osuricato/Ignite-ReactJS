@@ -10,7 +10,7 @@ export function Sidebar() {
     lg: false,
   })
 
-  if (isWideVersion) {
+  if (isWideVersion === true) {
     return (
       <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
         <DrawerOverlay>
