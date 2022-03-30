@@ -5,12 +5,12 @@ import { SidebarNav } from "./SidebarNav";
 export function Sidebar() {
   const { isOpen, onClose } = useSidebarDrawer()
 
-  const isDrawerSidebar = useBreakpointValue({
+  const isWideVersion = useBreakpointValue({
     base: true,
     lg: false,
   })
 
-  if (isDrawerSidebar) {
+  if (isWideVersion) {
     return (
       <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
         <DrawerOverlay>
