@@ -1,6 +1,5 @@
 import { Box, Button, Checkbox, Flex, Heading, Icon, Spinner, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue } from "@chakra-ui/react";
 import Link from "next/link";
-import { useEffect } from "react";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
 import { useQuery } from 'react-query'
 
@@ -9,23 +8,32 @@ import { Pagination } from "../../components/Pagination";
 import { Sidebar } from "../../components/Sidebar";
 
 export default function UserList() {
-  const { data, isLoading, error } = useQuery('users', async () => {
+  const { data, isLoading, isFetching, error } = useQuery('users', async () => {
     const responde = await fetch('http://localhost:3000/api/users')
     const data = await responde.json()
 
-    return data;
-  });
+    // const users = data.users.map(user => {
+    //   return {
+    //     id: user.id,
+    //     name: user.name,
+    //     email: user.email,
+    //     createdAt: new Date(user.createdAt).toLocaleDateString('pt-BR', {
+    //       day: '2-digit',
+    //       month: 'long',
+    //       year: 'numeric'
+    //     })
+    //   }
+    // })
 
-  console.log(data)
+    return data;
+  }, {
+    staleTime: 1000 * 5
+  });
 
   const isWideVersion = useBreakpointValue({
     base: true,
     lg: false,
   })
-
-  useEffect(() => {
-
-  }, [])
 
   return (
     <Box>
@@ -42,7 +50,12 @@ export default function UserList() {
 
         <Box flex="1" borderRadius={8} bg="gray.800" p="8">
           <Flex mb="8" justify="space-between" align="center">
-            <Heading size="lg" fontWeight="normal">Usuários</Heading>
+            <Heading size="lg" fontWeight="normal">
+              Usuários
+              { !isLoading && isFetching && (
+                <Spinner size="sm" color="gray.500" ml="4" />
+              )}
+            </Heading>
 
             <Link href="/users/create" passHref>
               <Button
@@ -82,29 +95,39 @@ export default function UserList() {
                 </Thead>
 
                 <Tbody>
-                  <Tr>
-                    <Td px={["4", "4", "6"]}>
-                      <Checkbox colorScheme="pink" />
-                    </Td>
-                    <Td>
-                      <Box>
-                        <Text fontWeight="bold">Samuel Souza</Text>
-                        <Text fontSize="sm" color="gray.300">ssouza.gomes10@gmail.com</Text>
-                      </Box>
-                    </Td>
-                    {isWideVersion && (<Td>29 de Março, 2022</Td>)}
-                    <Td>
-                      <Button
-                        as="a"
-                        size="sm"
-                        fontSize="sm"
-                        colorScheme="purple"
-                        leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
-                      >
-                        {isWideVersion ? 'Editar' : ''}
-                      </Button>
-                    </Td>
-                  </Tr>
+                  {data.users.map(user => (
+                    <Tr key={user.id}>
+                      <Td px={["4", "4", "6"]}>
+                        <Checkbox colorScheme="pink" />
+                      </Td>
+                      <Td>
+                        <Box>
+                          <Text fontWeight="bold">{user.name}</Text>
+                          <Text fontSize="sm" color="gray.300">{user.email}</Text>
+                        </Box>
+                      </Td>
+                      {isWideVersion && (
+                        <Td>
+                          {new Date(user.createdAt).toLocaleDateString('pt-BR', {
+                            day: '2-digit',
+                            month: 'long',
+                            year: 'numeric'
+                          })}
+                        </Td>)
+                      }
+                      <Td>
+                        <Button
+                          as="a"
+                          size="sm"
+                          fontSize="sm"
+                          colorScheme="purple"
+                          leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
+                        >
+                          {isWideVersion ? 'Editar' : ''}
+                        </Button>
+                      </Td>
+                    </Tr>
+                  ))}
                 </Tbody>
               </Table>
 

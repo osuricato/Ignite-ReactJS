@@ -15,7 +15,6 @@
     "@emotion/styled": "^11.8.1",
     "@hookform/resolvers": "^2.8.8",
     "apexcharts": "^3.33.2",
-    "faker": "^6.6.6",
     "framer-motion": "^6.2.8",
     "next": "12.1.0",
     "react": "17.0.2",
@@ -32,6 +31,7 @@
     "@types/react": "^17.0.39",
     "eslint": "8.10.0",
     "eslint-config-next": "12.1.0",
+    "faker": "5.5.3",
     "miragejs": "^0.1.43",
     "typescript": "^4.6.2"
   }
