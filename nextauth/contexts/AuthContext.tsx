@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useRouter } from "next/router";
-import { setCookie, parseCookies } from 'nookies'
+import { setCookie, parseCookies, destroyCookie } from 'nookies'
 import { createContext, ReactNode, useEffect, useState } from "react";
 
 import { api } from "../services/api";
@@ -27,6 +28,11 @@ type AuthContextData = {
 
 export const AuthContext = createContext({} as AuthContextData)
 
+export function signOut() {
+  destroyCookie(undefined, 'nextauth.token')
+  destroyCookie(undefined, 'nextauth.refreshToken')
+}
+
 export function AuthProvider({ children }: AuthProviderProps) {
   const router = useRouter()
 
@@ -37,17 +43,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const { 'nextauth.token': token } = parseCookies()
 
     if (token) {
-      api.get('/me').then(response => {
-        const { email, permissions, roles } = response.data
+      api.get('/me')
+        .then(response => {
+          const { email, permissions, roles } = response.data
 
-        setUser({
-          email,
-          permissions,
-          roles
+          setUser({ email, permissions, roles })
         })
-      })
+        .catch(() => {
+          signOut()
+
+          router.push('/')
+        })
     }
-  }, [])
+  }, [router])
 
   async function signIn({ email, password }: SignInCredentials) {
     try {
