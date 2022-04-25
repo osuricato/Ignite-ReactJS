@@ -1,9 +1,9 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import { useRouter } from "next/router";
+import { useRouter, Router } from "next/router";
+import { Navigate } from "react-router-dom";
 import { setCookie, parseCookies, destroyCookie } from 'nookies'
 import { createContext, ReactNode, useEffect, useState } from "react";
 
-import { api } from "../services/api";
+import { api } from "../services/apiClient";
 
 type User = {
   email: string;
@@ -31,6 +31,8 @@ export const AuthContext = createContext({} as AuthContextData)
 export function signOut() {
   destroyCookie(undefined, 'nextauth.token')
   destroyCookie(undefined, 'nextauth.refreshToken')
+
+  return <Navigate to='/' />
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
@@ -51,8 +53,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         })
         .catch(() => {
           signOut()
-
-          router.push('/')
         })
     }
   }, [router])

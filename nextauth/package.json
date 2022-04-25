@@ -10,11 +10,13 @@
   },
   "dependencies": {
     "@types/axios": "^0.14.0",
+    "@types/react-router-dom": "^5.3.3",
     "axios": "^0.26.1",
     "next": "12.1.5",
     "nookies": "^2.5.2",
     "react": "18.0.0",
-    "react-dom": "18.0.0"
+    "react-dom": "18.0.0",
+    "react-router-dom": "^6.3.0"
   },
   "devDependencies": {
     "@types/node": "17.0.24",
