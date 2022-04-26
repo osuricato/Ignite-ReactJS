@@ -26,7 +26,7 @@ export function setupAPIClient(ctx = undefined) {
         const { 'nextauth.refreshToken': refreshToken } = cookies;
         const originalConfig = error.config
   
-        if(!isRefreshing) {
+        if(isRefreshing) {
           isRefreshing = true
   
           api.post('/refresh', {
